@@ -13,10 +13,6 @@ public class Player : MonoBehaviour
     float playerMaxHealth;
     float playerCurrentHealth;
 
-    [SerializeField]
-    float playerMoveSpeed;
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -26,17 +22,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        HandleMovement();
         HandleRoll();
-    }
-
-    void HandleMovement()
-    {
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        Vector2 move = Vector2.zero;
-        move.x = Input.GetAxis("Horizontal");
-
-
     }
 
     void HandleRoll()
