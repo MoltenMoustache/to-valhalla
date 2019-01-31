@@ -13,6 +13,13 @@ public class Player : MonoBehaviour
     float playerMaxHealth;
     float playerCurrentHealth;
 
+    [SerializeField]
+    GameObject inventoryUI;
+    bool inventoryIsOpen;
+
+    [SerializeField]
+    float hitLength;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,11 +30,48 @@ public class Player : MonoBehaviour
     void Update()
     {
         HandleRoll();
+
+        HandleInventory();
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            HandleAttack();
+        }
     }
 
     void HandleRoll()
     {
+        
+    }
 
+    void HandleAttack()
+    {
+        float moveDirection = Input.GetAxisRaw("Horizontal");
+        RaycastHit2D raycast = Physics2D.Raycast(this.gameObject.transform.position, this.transform.forward, hitLength);
+        Debug.DrawRay(this.gameObject.transform.position, this.transform.forward, Color.green);
+
+        if(raycast)
+        {
+            Debug.LogWarning(raycast.transform.name);
+        }
+
+    }
+
+    void HandleInventory()
+    {
+        if (!inventoryIsOpen && Input.GetKeyDown(KeyCode.I))
+        {
+            inventoryIsOpen = true;
+            inventoryUI.SetActive(true);
+            Time.timeScale = 0f;
+
+        }
+        else if (inventoryIsOpen && (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.Escape)))
+        {
+            inventoryIsOpen = false;
+            inventoryUI.SetActive(false);
+            Time.timeScale = 1f;
+        }
     }
 
     #region healthfunctions
@@ -35,7 +79,16 @@ public class Player : MonoBehaviour
     public void TakeDamage(float dmg)
     {
         //reduces current health by the damage amount taken
-        playerCurrentHealth -= dmg;
+        dmg -= EquipmentManager.instance.totalArmourRating;
+        if (dmg <= 0)
+        {
+            return;
+        }
+        else
+        {
+            playerCurrentHealth -= dmg;
+        }
+        
 
         //ensures player health can not fall below 0
         if(playerCurrentHealth <= 0)
