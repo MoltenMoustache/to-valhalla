@@ -12,15 +12,63 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    //rage
+    public bool isRaged = false;
+    [SerializeField]
+    float maxRageTime;
+    float rageTime;
+
+    public SkillSO rage;
+    public SkillSO fires;
+    public SkillSO ice;
+
+    public bool unlockedRage;
+    public bool unlockedFire;
+    public bool unlockedFrost;
+    
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
+        unlockedRage = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerSkills>().playerSkills.Contains(rage);
+        unlockedFire = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerSkills>().playerSkills.Contains(fires);
+        unlockedFrost = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerSkills>().playerSkills.Contains(ice);
+
+        if (isRaged)
+        {
+            Rage();
+        }
+    }
+
+    public void UseSpecial()
+    {
+        if (unlockedRage)
+        {
+            isRaged = true;
+            if (unlockedFire)
+            {
+                Debug.Log("Unleash the " + fires.skillName);
+            }
+            else if (unlockedFrost)
+            {
+                Debug.Log("Unleash the " + ice.skillName);
+            }
+        }
         
+    }
+
+    void Rage()
+    {
+        rageTime -= Time.deltaTime;
+        if (rageTime <= 0)
+        {
+            isRaged = false;
+            rageTime = maxRageTime;
+        }
     }
 }

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c114e6c37c56f7548890eb1a73ea830b, type: 3}
+  m_Name: Wrath of Asgard
+  m_EditorClassIdentifier: 
+  skillName: Wrath of Asgard
+  skillIcon: {fileID: 21300000, guid: 6a594f62bffbbae4abaf4dca80176a0f, type: 3}
+  skillDescription: A barbaric rage, halving all damage for the next X amount of seconds.
+  runeCost: 2
+  requiredSkill: {fileID: 0}
+  counterSkill: {fileID: 0}

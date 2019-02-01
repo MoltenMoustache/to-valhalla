@@ -15,10 +15,13 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     GameObject inventoryUI;
-    bool inventoryIsOpen;
+
+    [SerializeField]
+    GameObject skillTreeUI;
 
     [SerializeField]
     float hitLength;
+
 
     // Start is called before the first frame update
     void Start()
@@ -30,12 +33,18 @@ public class Player : MonoBehaviour
     void Update()
     {
         HandleRoll();
-
+        HandleSpecial();
         HandleInventory();
+        HandleSkillTree();
 
         if (Input.GetKeyDown(KeyCode.F))
         {
             HandleAttack();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            TakeDamage(20);
         }
     }
 
@@ -59,18 +68,43 @@ public class Player : MonoBehaviour
 
     void HandleInventory()
     {
-        if (!inventoryIsOpen && Input.GetKeyDown(KeyCode.I))
+        if (!inventoryUI.activeSelf && Input.GetKeyDown(KeyCode.I))
         {
-            inventoryIsOpen = true;
             inventoryUI.SetActive(true);
+            skillTreeUI.SetActive(false);
             Time.timeScale = 0f;
 
         }
-        else if (inventoryIsOpen && (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.Escape)))
+        else if (inventoryUI.activeSelf && (Input.GetKeyDown(KeyCode.I) || Input.GetButtonDown("Back")))
         {
-            inventoryIsOpen = false;
             inventoryUI.SetActive(false);
             Time.timeScale = 1f;
+        }
+    }
+
+    void HandleSkillTree()
+    {
+        if (Input.GetKeyDown(KeyCode.K) && !skillTreeUI.activeSelf)
+        {
+            skillTreeUI.SetActive(true);
+            inventoryUI.SetActive(false);
+            Time.timeScale = 0f;
+        }
+        else if (Input.GetKeyDown(KeyCode.K) && skillTreeUI.activeSelf)
+        {
+            skillTreeUI.SetActive(false);
+            Time.timeScale = 1f;
+        }
+    }
+
+    void HandleSpecial()
+    {
+        if (Input.GetButtonDown("Special"))
+        {
+            if (GameManager.instance.unlockedRage)
+            {
+                GameManager.instance.UseSpecial();
+            }
         }
     }
 
@@ -80,13 +114,20 @@ public class Player : MonoBehaviour
     {
         //reduces current health by the damage amount taken
         dmg -= EquipmentManager.instance.totalArmourRating;
+        if (GameManager.instance.isRaged)
+        {
+            dmg /= 2;
+        }
+
         if (dmg <= 0)
         {
+            dmg = 0;
             return;
         }
         else
         {
             playerCurrentHealth -= dmg;
+            Debug.Log(playerCurrentHealth);
         }
         
 
@@ -94,6 +135,7 @@ public class Player : MonoBehaviour
         if(playerCurrentHealth <= 0)
         {
             playerCurrentHealth = 0.0f;
+            Debug.LogError("PLAYER DEATH!");
         }
 
         //debug message to display health and damage taken

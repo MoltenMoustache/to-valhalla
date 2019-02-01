@@ -20,12 +20,17 @@ public class Equipment : Item
         Inventory.instance.RemoveItem(this);
 
         EquipmentManager.instance.totalArmourRating += armourModifier;
+
+        if(isEnchanted && equipSlot != EquipmentSlot.Weapon)
+        {
+            Enchantment();
+        }
     }
 
-    public void Enchantment()
+    public virtual void Enchantment()
     {
 
     }
 }
 
-public enum EquipmentSlot { Head, Chest, Legs, Weapon, Trinket }
+public enum EquipmentSlot { Head, Chest, Legs, Trinket, Weapon, Offhand }
