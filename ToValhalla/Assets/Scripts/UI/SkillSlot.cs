@@ -63,21 +63,19 @@ public class SkillSlot : MonoBehaviour
     public void UnlockSkill()
     {
         //Debug.Log("Click!");
-
-        if (!isLocked || containedSkill.requiredSkill == null)
-        {
-            button.GetComponent<Image>().color = Color.yellow;
-            button.GetComponent<Button>().interactable = false;
-
-            if (!GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerSkills>().playerSkills.Contains(containedSkill))
+            if ((!isLocked || containedSkill.requiredSkill == null) && GameManager.instance.runes >= containedSkill.runeCost && button.GetComponent<Button>().interactable)
             {
-                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerSkills>().playerSkills.Add(containedSkill);
+                GameManager.instance.runes -= containedSkill.runeCost;
+                button.GetComponent<Image>().color = Color.yellow;
+                button.GetComponent<Button>().interactable = false;
+
+                if (!GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerSkills>().playerSkills.Contains(containedSkill))
+                {
+                    GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerSkills>().playerSkills.Add(containedSkill);
+                }
+
+                isUnlocked = true;
+                isLocked = true;
             }
-
-            isUnlocked = true;
-            isLocked = true;
         }
-
-        
     }
-}

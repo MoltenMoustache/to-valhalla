@@ -15,6 +15,6 @@ MonoBehaviour:
   skillName: Ice of Nifleheim
   skillIcon: {fileID: 21300000, guid: a3d20521b396c2a40a7448dd56bbe417, type: 3}
   skillDescription: 
-  runeCost: 4
+  runeCost: 2
   requiredSkill: {fileID: 11400000, guid: 52fc27f80cfb82741ac5c87e14eee1ec, type: 2}
   counterSkill: {fileID: 11400000, guid: b713325ef89b226469450a1035e2663c, type: 2}

@@ -12,16 +12,21 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    //currency
+    public int runes;
+
     //rage
     public bool isRaged = false;
     [SerializeField]
     float maxRageTime;
     float rageTime;
 
+    //skills
     public SkillSO rage;
     public SkillSO fires;
     public SkillSO ice;
 
+    //has unlocked skills
     public bool unlockedRage;
     public bool unlockedFire;
     public bool unlockedFrost;
