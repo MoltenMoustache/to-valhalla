@@ -6,9 +6,10 @@ public class Item : ScriptableObject
 {
     public string itemName;
     public Sprite itemIcon;
+    public string itemDescription;
 
     public virtual void UseItem()
     {
-
+        Inventory.instance.RemoveItem(this);
     }
 }

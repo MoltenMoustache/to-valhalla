@@ -10,5 +10,6 @@ public class Consumable : Item
     public override void UseItem()
     {
         GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().HealPlayer(healAmount);
+        base.UseItem();
     }
 }

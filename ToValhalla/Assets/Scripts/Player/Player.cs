@@ -74,6 +74,7 @@ public class Player : MonoBehaviour
         {
             inventoryUI.SetActive(true);
             skillTreeUI.SetActive(false);
+            Inventory.instance.onItemChangedCallback.Invoke();
             Time.timeScale = 0f;
 
         }

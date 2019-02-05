@@ -6,6 +6,7 @@ public class DialogHost : MonoBehaviour
 {
     //string playerName = GameManager.instance.playerName;
     public string[] dialogueLines;
+    public Queue<string> dialogueLinesL;
 
     bool isInRange = false;
     bool isTalking;

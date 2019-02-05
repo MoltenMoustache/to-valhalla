@@ -13,6 +13,9 @@ public class Inventory : MonoBehaviour
     }
     #endregion
 
+    public delegate void OnItemChanged();
+    public OnItemChanged onItemChangedCallback;
+
     //variable for inventory space, editable in inspector so dont touch this one
     public int inventorySpace = 20;
     //basically the bulk of the inventory itself
@@ -30,6 +33,11 @@ public class Inventory : MonoBehaviour
         else
         {
             inventoryItems.Add(item);
+
+            if(onItemChangedCallback != null)
+            {
+                onItemChangedCallback.Invoke();
+            }
         }
 
         return true;
@@ -40,5 +48,6 @@ public class Inventory : MonoBehaviour
     public void RemoveItem(Item item)
     {
         inventoryItems.Remove(item);
+        onItemChangedCallback.Invoke();
     }
 }
