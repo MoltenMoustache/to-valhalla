@@ -17,7 +17,11 @@ public class InventoryUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        float horizontalPress = Input.GetAxisRaw("Horizontal");
+        if(horizontalPress == -1)
+        {
+            OpenSkillTree();
+        }
     }
 
     public void OpenSkillTree()

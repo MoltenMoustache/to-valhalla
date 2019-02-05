@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
 
     #region movementvariables
     //movement variables
+    [Header("Movement Variables")]
     private Rigidbody2D rb;
     private float moveDirection;
     
@@ -18,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     float jumpForce;
 
     //walljump variables
+    [Header("Wall Jump Variables")]
     bool isOnWall;
     [SerializeField]
     Transform handPos;
@@ -27,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     LayerMask whatIsWall;
 
     //jump variables
+    [Header("Jump variables")]
     bool isGrounded;
     [SerializeField]
     Transform feetPos;
@@ -39,6 +42,20 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     float jumpTime;
     bool isJumping;
+
+    //roll variables
+    [Header("Roll Variables")]
+    bool isRolling;
+    [SerializeField]
+    float maxRollTime;
+    float rollTime;
+
+    //references
+    [Header("Object References")]
+    [SerializeField]
+    GameObject inventoryUI;
+    [SerializeField]
+    GameObject skillTreeUI;
     #endregion
 
     public GameObject dustParticle;
@@ -48,13 +65,17 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        //gets move direction input
-        moveDirection = Input.GetAxisRaw("Horizontal");
+        if(!skillTreeUI.activeSelf && !inventoryUI.activeSelf)
+        {
+            //gets move direction input
+            moveDirection = Input.GetAxisRaw("Horizontal");
+        }
 
         //checks to see if the player is touching a wall or the ground
         isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, whatIsGround);
@@ -63,6 +84,12 @@ public class PlayerMovement : MonoBehaviour
         Flip();
         HandleJump();
         HandleSprint();
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            isRolling = true;
+            rollTime = maxRollTime;
+        }
 
         //this method spawns a dust particle when the player lands, I commented it out because I'll implement a good particle system later.
         //if (isGrounded)
@@ -82,10 +109,18 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!isRolling)
+        {
         //adds velocity, therefore moving the player depending on move direction input
         rb.velocity = new Vector2(moveDirection * playerMoveSpeed, rb.velocity.y);
         //calls the jump function
-        
+
+        }
+
+        if (isRolling)
+        {
+            HandleRoll();
+        }
         
     }
     #region playermovement
@@ -125,21 +160,36 @@ public class PlayerMovement : MonoBehaviour
         //}
     }
 
+    void HandleRoll()
+    {
+        rollTime -= Time.deltaTime;
+        if(rollTime > 0)
+        {
+        playerMoveSpeed = 3.5f;
+        rb.velocity = new Vector2(moveDirection * playerMoveSpeed, rb.velocity.y);
+        }
+        else
+        {
+            isRolling = false;
+            rollTime = maxRollTime;
+        }
+    }
+
     void HandleSprint()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift))
         {
             isRunning = true;
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             isRunning = false;
-            playerMoveSpeed /= 0.15f;
+            playerMoveSpeed = 2f;
         }
 
         if (isRunning)
         {
-            playerMoveSpeed *= 0.15f;
+            playerMoveSpeed = 3f;
         }
     }
 

@@ -10,7 +10,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    float playerMaxHealth;
+    public float playerMaxHealth;
     float playerCurrentHealth;
 
     [SerializeField]
@@ -21,6 +21,8 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     float hitLength;
+
+
 
 
     // Start is called before the first frame update
@@ -151,6 +153,22 @@ public class Player : MonoBehaviour
             playerCurrentHealth = playerMaxHealth;
         }
         Debug.Log("Player healed by " + heal + ". Current health: " + playerCurrentHealth);
+    }
+
+    public void IncreaseMaxHealth(float amount)
+    {
+        playerMaxHealth += amount;
+        playerCurrentHealth += amount;
+    }
+
+    public void DecreaseMaxHealth(float amount)
+    {
+        playerMaxHealth -= amount;
+
+        if(playerCurrentHealth > playerMaxHealth)
+        {
+            playerCurrentHealth = playerMaxHealth;
+        }
     }
     #endregion
 }

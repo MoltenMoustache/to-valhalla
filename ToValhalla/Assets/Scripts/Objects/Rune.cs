@@ -9,6 +9,6 @@ public class Rune : Item
 
     public override void UseItem()
     {
-        GameManager.instance.runes += runeAmount;
+        GameManager.instance.AddRunes(runeAmount);
     }
 }

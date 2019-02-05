@@ -65,7 +65,7 @@ public class SkillSlot : MonoBehaviour
         //Debug.Log("Click!");
             if ((!isLocked || containedSkill.requiredSkill == null) && GameManager.instance.runes >= containedSkill.runeCost && button.GetComponent<Button>().interactable)
             {
-                GameManager.instance.runes -= containedSkill.runeCost;
+            GameManager.instance.RemoveRunes(containedSkill.runeCost);
                 button.GetComponent<Image>().color = Color.yellow;
                 button.GetComponent<Button>().interactable = false;
 
