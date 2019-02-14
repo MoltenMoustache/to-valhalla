@@ -45,5 +45,9 @@ public class InventorySlot : MonoBehaviour
         invUI.UnselectSlots();
         selectedSlot = this;
         invUI.UpdateDetails();
+        Color colour;
+        colour = Color.gray;
+        colour.a = 0.3922f;
+        GetComponent<Image>().color = colour;
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Consumable", menuName = "Inventory/Consumable")]
 public class Consumable : Item
 {
-    public float healAmount;
+    public int healAmount;
 
     public override void UseItem()
     {

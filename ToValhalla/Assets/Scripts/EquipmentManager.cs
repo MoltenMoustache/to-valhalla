@@ -12,8 +12,9 @@ public class EquipmentManager : MonoBehaviour
     }
     #endregion
 
-    Equipment[] currentEquipment;
-    public float totalArmourRating;
+    public Equipment[] currentEquipment;
+    public int totalArmourRating;
+    public int currentArmourRating;
 
     // Start is called before the first frame update
     void Start()
@@ -25,9 +26,55 @@ public class EquipmentManager : MonoBehaviour
 
     public void EquipItem(Equipment newItem)
     {
+        Equipment oldItem;
         int slotIndex = (int)newItem.equipSlot;
 
-        currentEquipment[slotIndex] = newItem;
+        currentArmourRating += newItem.armourModifier;
+        if(currentArmourRating > totalArmourRating)
+        {
+            currentArmourRating = totalArmourRating;
+        }
+
+        if(currentEquipment[slotIndex] == null)
+        {
+            currentEquipment[slotIndex] = newItem;
+        }
+        else
+        {
+            oldItem = currentEquipment[slotIndex];
+            currentEquipment[slotIndex] = newItem;
+            Inventory.instance.AddItem(oldItem);
+            totalArmourRating -= oldItem.armourModifier;
+        }
+        if (newItem.isEnchanted)
+        {
+            newItem.Enchantment();
+        }
+    }
+
+    public void UnequipItem(Equipment oldItem)
+    {
+        int slotIndex = (int)oldItem.equipSlot;
+
+        currentEquipment[slotIndex] = null;
+
+        if(currentArmourRating > totalArmourRating)
+        {
+            currentArmourRating = totalArmourRating;
+        }
+        if (oldItem.isEnchanted)
+        {
+            //oldItem.Unenchant();
+        }
+    }
+    public void FixArmour()
+    {
+        currentArmourRating = totalArmourRating;
+    }
+
+    public void DamageArmour()
+    {
+        currentArmourRating--;
     }
 
 }

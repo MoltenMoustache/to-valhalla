@@ -6,8 +6,8 @@ using UnityEngine;
 public class Equipment : Item
 {
 
-    public float armourModifier;
-    public float damageModifier;
+    public int armourModifier;
+    public int damageModifier;
     public bool isEnchanted;
 
     public EquipmentSlot equipSlot;
@@ -15,9 +15,7 @@ public class Equipment : Item
 
     public override void UseItem()
     {
-        base.UseItem();
         EquipmentManager.instance.EquipItem(this);
-        Inventory.instance.RemoveItem(this);
 
         EquipmentManager.instance.totalArmourRating += armourModifier;
 
@@ -25,6 +23,8 @@ public class Equipment : Item
         {
             Enchantment();
         }
+        base.UseItem();
+
     }
 
     public virtual void Enchantment()

@@ -17,13 +17,19 @@ public class InventoryUI : MonoBehaviour
     public TextMeshProUGUI itemName;
     public TextMeshProUGUI itemDescription;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         inventory = Inventory.instance;
         inventory.onItemChangedCallback += UpdateUI;
 
         slots = slotsParent.GetComponentsInChildren<InventorySlot>();
+
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+
     }
 
     // Update is called once per frame
@@ -34,6 +40,8 @@ public class InventoryUI : MonoBehaviour
         {
             OpenSkillTree();
         }
+
+        ButtonHotkey();
     }
 
     public void OpenSkillTree()
@@ -61,7 +69,14 @@ public class InventoryUI : MonoBehaviour
     {
         for (int i = 0; i < slots.Length; i++)
         {
-            slots[i].selectedSlot = null;
+            if(slots[i].selectedSlot != null)
+            {
+                slots[i].selectedSlot = null;
+                Color colour;
+                colour = Color.white;
+                colour.a = 0.3922f;
+                slots[i].GetComponent<Image>().color = colour;
+            }
         }
         //UpdateDetails();
     }
@@ -73,16 +88,20 @@ public class InventoryUI : MonoBehaviour
         {
             if(slots[i].selectedSlot != null)
             {
-                itemToDrop = slots[i].item;
-                //UnselectSlots();
-                Inventory.instance.RemoveItem(itemToDrop);
-            }else if(slots[i].selectedSlot == null)
-            {
-
+                if(slots[i].selectedSlot.item != null)
+                {
+                    itemToDrop = slots[i].item;
+                    //UnselectSlots();
+                    Inventory.instance.RemoveItem(itemToDrop);
+                    UnselectSlots();
+                }
             }
         }
+
+        UnselectSlots();
     }
 
+    //when function is called, the item in the currently selected slot is used
     public void UseItem()
     {
         Item itemToUse = null;
@@ -90,8 +109,36 @@ public class InventoryUI : MonoBehaviour
         {
             if(slots[i].selectedSlot != null)
             {
-                itemToUse = slots[i].item;
-                itemToUse.UseItem();
+                if(slots[i].selectedSlot.item != null)
+                {
+                    itemToUse = slots[i].item;
+                    itemToUse.UseItem();
+                }
+            }
+        }
+
+        UnselectSlots();
+    }
+
+    void ButtonHotkey()
+    {
+        if (this.gameObject.activeSelf && Input.GetButtonDown("Interact"))
+        {
+            for (int i = 0; i < slots.Length; i++)
+            {
+                if (slots[i].selectedSlot != null && slots[i].selectedSlot.item != null)
+                {
+                    UseItem();
+                }
+            }
+        } else if (this.gameObject.activeSelf && Input.GetKeyDown(KeyCode.X))
+        {
+            for (int i = 0; i < slots.Length; i++)
+            {
+                if(slots[i].selectedSlot != null && slots[i].selectedSlot.item != null)
+                {
+                    DropItem();
+                }
             }
         }
     }
@@ -103,9 +150,12 @@ public class InventoryUI : MonoBehaviour
         {
             if(slots[i].selectedSlot != null)
             {
-                selectedItem = slots[i].item;
-                itemName.text = selectedItem.itemName;
-                itemDescription.text = selectedItem.itemDescription;
+                if(slots[i].selectedSlot.item != null)
+                {
+                    selectedItem = slots[i].item;
+                    itemName.text = selectedItem.itemName;
+                    itemDescription.text = selectedItem.itemDescription;
+                }
             }
         }
         

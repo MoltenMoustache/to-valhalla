@@ -1,16 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class DialogHost : MonoBehaviour
 {
+    public string npcName;
     //string playerName = GameManager.instance.playerName;
     public string[] dialogueLines;
-    public Queue<string> dialogueLinesL;
 
-    bool isInRange = false;
-    bool isTalking;
-    int lineNumber = 0;
+    [SerializeField]
+    protected GameObject dialoguePanel;
+
+    [SerializeField]
+    protected TextMeshProUGUI nameText;
+    [SerializeField]
+    protected TextMeshProUGUI dialogueText;
+
+    protected bool isInRange = false;
+    protected bool isTalking;
+    bool isDone = false;
+    protected int lineNumber = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -19,7 +29,7 @@ public class DialogHost : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         if(!isTalking && isInRange && Input.GetButtonDown("Interact"))
         {
@@ -40,24 +50,32 @@ public class DialogHost : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    protected virtual void OnTriggerExit2D(Collider2D collision)
     {
         if(collision.tag == "Player")
         {
             isInRange = false;
+            dialoguePanel.SetActive(false);
         }
     }
 
-    void BeginDialogue()
+    protected virtual void BeginDialogue()
     {
         isTalking = true;
+        dialoguePanel.SetActive(true);
+
+        nameText.text = npcName;
         if(lineNumber > dialogueLines.Length -1)
         {
-            Debug.Log("...");
+            dialogueText.text = "...";
         }
         else
         {
-            Debug.Log(dialogueLines[lineNumber]);
+            dialogueText.text = dialogueLines[lineNumber];
+            if(lineNumber > dialogueLines.Length)
+            {
+
+            }
         }
     }
 }

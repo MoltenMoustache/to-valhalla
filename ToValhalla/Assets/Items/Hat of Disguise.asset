@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd932f14dd5ad1d43af6a3fa4ab7a77d, type: 3}
-  m_Name: Helmet of Protection
+  m_Name: Hat of Disguise
   m_EditorClassIdentifier: 
-  itemName: Helmet of Protection
-  itemIcon: {fileID: 21300000, guid: 39a35c8b66fc6084d9db234255bfaace, type: 3}
-  itemDescription: This helmet. Protects, things. Usually people.
-  armourModifier: 4
+  itemName: Yeet
+  itemIcon: {fileID: 21300000, guid: a3d20521b396c2a40a7448dd56bbe417, type: 3}
+  itemDescription: Blah blah blah poop
+  armourModifier: 3
   damageModifier: 0
   isEnchanted: 0
   equipSlot: 0

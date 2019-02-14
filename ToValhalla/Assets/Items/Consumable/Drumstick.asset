@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Chicken Drumstick
   itemIcon: {fileID: 21300000, guid: 318c3395dba1cc442bc3c7ad57257748, type: 3}
-  healAmount: 4
+  itemDescription: Seems a bit old, but still edible.
+  healAmount: 2

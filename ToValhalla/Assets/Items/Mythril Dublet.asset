@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd932f14dd5ad1d43af6a3fa4ab7a77d, type: 3}
-  m_Name: Helmet of Protection
+  m_Name: Mythril Dublet
   m_EditorClassIdentifier: 
-  itemName: Helmet of Protection
-  itemIcon: {fileID: 21300000, guid: 39a35c8b66fc6084d9db234255bfaace, type: 3}
-  itemDescription: This helmet. Protects, things. Usually people.
-  armourModifier: 4
+  itemName: Mythril Dublet
+  itemIcon: {fileID: 21300000, guid: 6a594f62bffbbae4abaf4dca80176a0f, type: 3}
+  itemDescription: This dublet is made of mythril, incompatible with Hobbits.
+  armourModifier: 2
   damageModifier: 0
   isEnchanted: 0
-  equipSlot: 0
+  equipSlot: 1

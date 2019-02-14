@@ -9,18 +9,26 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [Header("Health")]
     [SerializeField]
-    public float playerMaxHealth;
-    float playerCurrentHealth;
+    public int playerMaxHealth;
+    int playerCurrentHealth;
 
+    [Header("UI References")]
     [SerializeField]
     GameObject inventoryUI;
 
     [SerializeField]
     GameObject skillTreeUI;
 
-    [SerializeField]
-    float hitLength;
+    [Header("Attack Variables")]
+
+    float attackCooldown;
+    public float maxAttackCooldown;
+    public Transform attackPos;
+    public float attackRange;
+    public LayerMask damageable;
+    public int attackDamage;
 
 
 
@@ -38,15 +46,11 @@ public class Player : MonoBehaviour
         HandleSpecial();
         HandleInventory();
         HandleSkillTree();
-
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            HandleAttack();
-        }
+        HandleMeleeAttack();
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            TakeDamage(20);
+            TakeDamage(1);
         }
     }
 
@@ -55,17 +59,39 @@ public class Player : MonoBehaviour
         
     }
 
-    void HandleAttack()
+    void HandleMeleeAttack()
     {
-        float moveDirection = Input.GetAxisRaw("Horizontal");
-        RaycastHit2D raycast = Physics2D.Raycast(this.gameObject.transform.position, this.transform.forward, hitLength);
-        Debug.DrawRay(this.gameObject.transform.position, this.transform.forward, Color.green);
-
-        if(raycast)
+        if(attackCooldown <= 0)
         {
-            Debug.LogWarning(raycast.transform.name);
+            if (Input.GetButtonDown("Fire1"))
+            {
+                Debug.Log("Sah-swing! Bata bata bata. Sah-wing bataaa...");
+
+                Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, damageable);
+                for (int i = 0; i < enemiesToDamage.Length; i++)
+                {
+                    enemiesToDamage[i].GetComponent<Creature>().DamageCreature(attackDamage);
+                    Debug.LogWarning("Hello!");
+                }
+            }
+        }
+        else
+        {
+            attackCooldown -= Time.deltaTime;
         }
 
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(attackPos.position, attackRange);
+    }
+
+    public void InsertWeaponDetails(float weaponRange, float weaponCooldown)
+    {
+        attackRange = weaponRange;
+        maxAttackCooldown = weaponCooldown;
     }
 
     void HandleInventory()
@@ -113,10 +139,9 @@ public class Player : MonoBehaviour
 
     #region healthfunctions
     //use this function to damage the player, as opposed to doing it directly
-    public void TakeDamage(float dmg)
+    public void TakeDamage(int dmg)
     {
         //reduces current health by the damage amount taken
-        dmg -= EquipmentManager.instance.totalArmourRating;
         if (GameManager.instance.isRaged)
         {
             dmg /= 2;
@@ -132,12 +157,22 @@ public class Player : MonoBehaviour
             playerCurrentHealth -= dmg;
             Debug.Log(playerCurrentHealth);
         }
+
+        if(EquipmentManager.instance.currentArmourRating == 0)
+        {
+            playerCurrentHealth--;
+            Debug.Log(playerCurrentHealth);
+        }
+        else
+        {
+            EquipmentManager.instance.DamageArmour();
+        }
         
 
         //ensures player health can not fall below 0
         if(playerCurrentHealth <= 0)
         {
-            playerCurrentHealth = 0.0f;
+            playerCurrentHealth = 0;
             Debug.LogError("PLAYER DEATH!");
         }
 
@@ -146,7 +181,7 @@ public class Player : MonoBehaviour
     }
 
     //use this function to heal the player, as opposed to doing it directly
-    public void HealPlayer(float heal)
+    public void HealPlayer(int heal)
     {
         playerCurrentHealth += heal;
         if (playerCurrentHealth > playerMaxHealth)
@@ -156,13 +191,13 @@ public class Player : MonoBehaviour
         Debug.Log("Player healed by " + heal + ". Current health: " + playerCurrentHealth);
     }
 
-    public void IncreaseMaxHealth(float amount)
+    public void IncreaseMaxHealth(int amount)
     {
         playerMaxHealth += amount;
         playerCurrentHealth += amount;
     }
 
-    public void DecreaseMaxHealth(float amount)
+    public void DecreaseMaxHealth(int amount)
     {
         playerMaxHealth -= amount;
 
